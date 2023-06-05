@@ -1,0 +1,19 @@
+.ListItem {
+    padding-bottom: 2;
+    padding-bottom: 0;
+    display: 'flex';
+    flex-direction: 'row';
+  }
+
+  .Box-p {
+    align-items: 'left';
+    display: 'flex';
+    justify-content: 'space-between';
+  }
+
+  .Box-s {
+    align-items: 'flex-start';
+    display: 'flex';
+    flex-direction: 'column';
+    padding-top: 2;
+  }

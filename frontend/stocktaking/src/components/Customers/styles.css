@@ -1,0 +1,11 @@
+.box {
+    flex-grow: 1;
+    padding-top: 8;
+    padding-bottom: 8;
+    background-color: azure;
+  }
+
+
+  .icons {
+ margin-right: 1;
+  }

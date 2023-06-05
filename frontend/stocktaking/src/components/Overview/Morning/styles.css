@@ -1,0 +1,12 @@
+.Box {
+    flex-grow: 1;
+    padding-top: 8;
+    display:'flex';
+  }
+
+.Grid {
+    padding: '10px';
+    display: "flex";
+    align-items: "center";
+    margin: -1;
+}
