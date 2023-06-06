@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.unir.products.model.pojo.Product;
 import com.unir.products.model.request.CreateProductRequest;
 import com.unir.products.service.ProductsService;
+import com.unir.products.service.ProductsServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,9 @@ import lombok.extern.slf4j.Slf4j;
 public class ProductsController {
 
 	// con el RestController y required ya se hace la inyeccion pero a nivel de constructor
-	private final ProductsService service;
+	// inyeccion por interfaz
+    //	private final ProductsService service;
+	private final ProductsServiceImpl service;
 	
 	//Peticion Get /Products
 	@GetMapping("/products")

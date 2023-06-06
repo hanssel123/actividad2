@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+// Manejara datos
 @Entity
 @Table(name = "products")
 @Getter

@@ -11,8 +11,10 @@ import com.unir.products.model.pojo.Product;
 import com.unir.products.model.request.CreateProductRequest;
 
 @Service
+// podría poner @Servicie("Service1") se llama con @Qualifier("Service1")
 public class ProductsServiceImpl implements ProductsService {
 
+	// Inyección por atributo aqui me contacto con capa de datos  
 	@Autowired
 	private ProductRepository repository;
 
