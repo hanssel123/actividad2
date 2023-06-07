@@ -2,6 +2,7 @@ package com.unir.products.service;
 
 import java.util.List;
 
+import com.unir.products.model.request.UpdateProductRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -58,8 +59,6 @@ public class ProductsServiceImpl implements ProductsService {
 				&& request.getInStock() != null
 				&& request.getIsAvailable() != null
 				&& request.getIsShippable() != null
-				&& request.getPrice() > 0
-				&& request.getQuantity() > 0
 				&& StringUtils.hasLength(request.getSku().trim())
 				&& StringUtils.hasLength(request.getStatus().trim())
 				&& request.getUpdatedAt() != null
@@ -77,8 +76,8 @@ public class ProductsServiceImpl implements ProductsService {
 					.inStock(request.getInStock())
 					.isAvailable(request.getIsAvailable())
 					.isShippable(request.getIsShippable())
-					.price(request.getPrice())
-					.quantity(request.getQuantity())
+					.price(0.0)
+					.quantity(0)
 					.sku(request.getSku())
 					.status(request.getStatus())
 					.updatedAt(request.getUpdatedAt())
@@ -89,6 +88,47 @@ public class ProductsServiceImpl implements ProductsService {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public Product updateProduct(UpdateProductRequest request) {
+		if (request != null && StringUtils.hasLength(request.getName().trim())
+				&& StringUtils.hasLength(request.getCategory().trim())
+				&& request.getCreatedAt() != null
+				&& StringUtils.hasLength(request.getCurrency().trim())
+				&& StringUtils.hasLength(request.getImage().trim())
+				&& request.getInStock() != null
+				&& request.getIsAvailable() != null
+				&& request.getIsShippable() != null
+				&& request.getPrice() > 0
+				&& request.getQuantity() > 0
+				&& StringUtils.hasLength(request.getSku().trim())
+				&& StringUtils.hasLength(request.getStatus().trim())
+				&& request.getUpdatedAt() != null
+				&& request.getVariants() > 0
+		) {
+			Product product = Product.builder()
+					.id(request.getId())
+					.name(request.getName())
+					.category(request.getCategory())
+					.createdAt(request.getCreatedAt())
+					.currency(request.getCurrency())
+					.image(request.getImage())
+					.inStock(request.getInStock())
+					.isAvailable(request.getIsAvailable())
+					.isShippable(request.getIsShippable())
+					.price(request.getPrice())
+					.quantity(request.getQuantity())
+					.sku(request.getSku())
+					.status(request.getStatus())
+					.updatedAt(request.getUpdatedAt())
+					.variants(request.getVariants())
+					.build();
+
+			return repository.save(product);
+		}
+
+		else return null;
 	}
 
 }

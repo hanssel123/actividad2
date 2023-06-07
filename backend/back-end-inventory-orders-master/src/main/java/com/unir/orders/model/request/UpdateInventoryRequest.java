@@ -11,7 +11,9 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderRequest {
+public class UpdateInventoryRequest {
 
-	private List<String> products;
+	private long productId;
+	private int quantity;
+
 }

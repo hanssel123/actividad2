@@ -4,15 +4,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.unir.products.model.request.UpdateProductRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.unir.products.model.pojo.Product;
 import com.unir.products.model.request.CreateProductRequest;
@@ -35,8 +30,8 @@ public class ProductsController {
 	private final ProductsServiceImpl service;
 	
 	//Peticion Get /Products
-	@GetMapping("/products")
-	public ResponseEntity<List<Product>> getProducts(@RequestHeader Map<String, String> headers) {
+	@GetMapping("/product")
+	public ResponseEntity<List<Product>> getProductsList(@RequestHeader Map<String, String> headers) {
 	// Si se desea trabajar con params /products?name_x=cepillo&precio=12
 	// public ResponseEntity<List<Product>> getProducts(@RequestHeader Map<String, String> headers, 
 	// @RequestParam(name = "name_x", required = true) String name, @RequestParam Integer precio ){ name =...
@@ -50,7 +45,7 @@ public class ProductsController {
 		}
 	}
 
-	@GetMapping("/products/{productId}")
+	@GetMapping("/product/{productId}")
 	// se podría cambiar a ResponseEntity<Object> 
 	public ResponseEntity<Product> getProduct(@PathVariable String productId) {
 
@@ -65,7 +60,7 @@ public class ProductsController {
 
 	}
 
-	@DeleteMapping("/products/{productId}")
+	@DeleteMapping("/product/{productId}")
 	public ResponseEntity<Void> deleteProduct(@PathVariable String productId) {
 
 		Boolean removed = service.removeProduct(productId);
@@ -78,13 +73,26 @@ public class ProductsController {
 
 	}
 
-	@PostMapping("/products")
-	public ResponseEntity<Product> getProduct(@RequestBody CreateProductRequest request) {
+	@PostMapping("/product")
+	public ResponseEntity<Product> createProduct(@RequestBody CreateProductRequest request) {
 
 		Product createdProduct = service.createProduct(request);
 
 		if (createdProduct != null) {
 			return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
+		} else {
+			return ResponseEntity.badRequest().build();
+		}
+
+	}
+
+	@PutMapping("/product")
+	public ResponseEntity<Product> updateProduct(@RequestBody UpdateProductRequest request) {
+
+		Product updatedProduct = service.updateProduct(request);
+
+		if (updatedProduct != null) {
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(updatedProduct);
 		} else {
 			return ResponseEntity.badRequest().build();
 		}
