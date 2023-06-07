@@ -18,12 +18,26 @@ public class ProductsFacade {
 
   private final RestTemplate restTemplate;
 
-  public Product getProduct(String id) {
+  public Product getProduct(long id) {
 
     try {
-      return restTemplate.getForObject(String.format(getProductUrl, id), Product.class);
+      String productUrl = String.format(getProductUrl, id);
+      Product productReceived = restTemplate.getForObject(productUrl, Product.class);
+      return productReceived;
     } catch (HttpClientErrorException e) {
       log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), id);
+      return null;
+    }
+  }
+
+  public Product updateProduct(Product product) {
+    try {
+      String productUrl = String.format(getProductUrl, "");
+      productUrl = productUrl.substring(1, productUrl.length() - 1);
+      restTemplate.put(productUrl, product);
+      return product;
+    } catch (HttpClientErrorException e) {
+      log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), product.getId());
       return null;
     }
   }

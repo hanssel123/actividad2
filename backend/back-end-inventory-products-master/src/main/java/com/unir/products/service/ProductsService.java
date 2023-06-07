@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.unir.products.model.pojo.Product;
 import com.unir.products.model.request.CreateProductRequest;
+import com.unir.products.model.request.UpdateProductRequest;
 
 public interface ProductsService {
 	
@@ -14,5 +15,7 @@ public interface ProductsService {
 	Boolean removeProduct(String productId);
 	
 	Product createProduct(CreateProductRequest request);
+
+	Product updateProduct(UpdateProductRequest request);
 
 }
