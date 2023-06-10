@@ -51,7 +51,7 @@ public class Product {
 	@Column(name = "category")
     private String category;
 	
-	@Column(name = "createdA")
+	@Column(name = "createdAt")
     private Date createdAt;
 	
 	@Column(name = "currency")

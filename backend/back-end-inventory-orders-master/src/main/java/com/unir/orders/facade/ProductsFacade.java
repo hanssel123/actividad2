@@ -1,5 +1,6 @@
 package com.unir.orders.facade;
 
+import com.unir.orders.model.pojo.Item;
 import com.unir.orders.model.pojo.Product;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,19 +14,19 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class ProductsFacade {
 
-  @Value("${getProduct.url}")
-  private String getProductUrl;
+    @Value("${getProduct.url}")
+    private String getProductUrl;
 
-  private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
-  public Product getProduct(String id) {
+    public Item getItemsFromProducts(String id) {
 
-    try {
-      return restTemplate.getForObject(String.format(getProductUrl, id), Product.class);
-    } catch (HttpClientErrorException e) {
-      log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), id);
-      return null;
+        try {
+            return restTemplate.getForObject(String.format(getProductUrl, id), Item.class);
+        } catch (HttpClientErrorException e) {
+            log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), id);
+            return null;
+        }
     }
-  }
 
 }

@@ -1,9 +1,13 @@
 package com.unir.orders.service;
 
+import com.unir.orders.model.pojo.Order;
 import com.unir.orders.model.request.OrderRequest;
 
+import java.util.List;
+
 public interface OrdersService {
-	
-	String createOrder(OrderRequest request);
+    List<Order> getOrders();
+
+    Order createOrder(OrderRequest request);
 
 }

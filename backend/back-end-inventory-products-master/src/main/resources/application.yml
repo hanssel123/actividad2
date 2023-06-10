@@ -3,7 +3,7 @@ spring:
   application:
     name: ms-inventory-products
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:productsbackenddb
   jpa:
     show-sql: true
   h2:
