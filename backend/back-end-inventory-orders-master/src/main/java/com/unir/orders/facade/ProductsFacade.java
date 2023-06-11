@@ -1,13 +1,18 @@
 package com.unir.orders.facade;
 
-import com.unir.orders.model.pojo.Item;
-import com.unir.orders.model.pojo.Product;
+import com.unir.orders.model.request.UpdateInventoryRequest;
+import com.unir.orders.model.response.ProductResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import java.net.URI;
 
 @Component
 @RequiredArgsConstructor
@@ -19,10 +24,56 @@ public class ProductsFacade {
 
     private final RestTemplate restTemplate;
 
-    public Item getItemsFromProducts(String id) {
+    public ProductResponse getProduct(long id) {
 
         try {
-            return restTemplate.getForObject(String.format(getProductUrl, id), Item.class);
+            String productUrl = String.format(getProductUrl, id);
+            ProductResponse productReceived = restTemplate.getForObject(productUrl, ProductResponse.class);
+            return productReceived;
+        } catch (HttpClientErrorException e) {
+            log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), id);
+            return null;
+        }
+    }
+
+    public ProductResponse updateProductStock(long id, UpdateInventoryRequest request) {
+        try {
+            String productUrl = String.format(getProductUrl, id) + "/stock";
+
+            final URI url = URI.create(productUrl);
+
+            CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+            HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+            RestTemplate restTemplateForFactory = new RestTemplate(requestFactory);
+
+            String responseEntity = restTemplateForFactory.patchForObject(productUrl, request, String.class);
+
+            return null;
+            /*
+            ObjectMapper objectMapper = new ObjectMapper();
+            String requestBody = objectMapper.writeValueAsString(request);
+
+
+
+            //ProductResponse productStockUpdated = restTemplate.patchForObject(productUrl, request, ProductResponse.class);
+
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(URI.create(productUrl))
+                    .header("Content-Type", "application/json")
+                    .method("PATCH", HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            HttpResponse<String> response = HttpClient.newHttpClient().send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            int statusCode = response.statusCode();
+
+            if (statusCode == 202) {
+                String responseBody = response.body();
+                ProductResponse productStockUpdated = objectMapper.readValue(responseBody, ProductResponse.class);
+                return productStockUpdated;
+            } else {
+                return null;
+            }*/
         } catch (HttpClientErrorException e) {
             log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), id);
             return null;

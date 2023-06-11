@@ -1,10 +1,11 @@
 package com.unir.orders.controller;
 
 import com.unir.orders.model.pojo.Order;
+import com.unir.orders.service.OrdersServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.unir.orders.model.request.OrderRequest;
+import com.unir.orders.model.request.CreateOrderRequest;
 import com.unir.orders.service.OrdersService;
 
 import lombok.RequiredArgsConstructor;
@@ -14,12 +15,12 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/orders")
+@RequestMapping("order")
 @RequiredArgsConstructor
 @Slf4j
 public class OrdersController {
 
-    private final OrdersService service;
+    private final OrdersServiceImpl service;
 
     @GetMapping
     public ResponseEntity<List<Order>> getOrders(@RequestHeader Map<String, String> headers) {
@@ -34,7 +35,7 @@ public class OrdersController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody OrderRequest request) {
+    public ResponseEntity<Order> createOrder(@RequestBody CreateOrderRequest request) {
 
         Order createdOrder = service.createOrder(request);
 

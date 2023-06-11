@@ -1,11 +1,7 @@
 package com.unir.orders.model.pojo;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -23,21 +21,25 @@ import lombok.ToString;
 @Builder
 @ToString
 public class Product {
+    @Id
+    private long id;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Column(name = "name", unique = true)
+    private String name;
 
-	@Column(name = "name", unique = true)
-	private String name;
+    @Column(name = "category")
+    private String category;
 
-	@Column(name = "country")
-	private String country;
+    @Column(name = "currency")
+    private String currency;
 
-	@Column(name = "description")
-	private String description;
+    @Column(name = "image")
+    private String image;
 
-	@Column(name = "visible")
-	private Boolean visible;
+    @Column(name = "price")
+    private Double price;
 
+    @OneToMany(mappedBy = "product")
+    @JsonManagedReference
+    private List<OrderProduct> orderProducts;
 }

@@ -1,23 +1,22 @@
 package com.unir.orders.service;
 
 import com.unir.orders.data.CustomerRepository;
-import com.unir.orders.data.ItemRepository;
-import com.unir.orders.data.OrderItemRepository;
+import com.unir.orders.data.OrderProductRepository;
 import com.unir.orders.data.OrderRepository;
+import com.unir.orders.data.ProductRepository;
 import com.unir.orders.model.pojo.*;
-import com.unir.orders.model.request.ItemDetails;
-import org.bouncycastle.cms.PasswordRecipient;
+import com.unir.orders.model.request.ProductExtraInfo;
+import com.unir.orders.model.request.UpdateInventoryRequest;
+import com.unir.orders.model.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import com.unir.orders.facade.ProductsFacade;
-import com.unir.orders.model.request.OrderRequest;
+import com.unir.orders.model.request.CreateOrderRequest;
 import org.springframework.util.StringUtils;
 
 @Service
@@ -33,10 +32,10 @@ public class OrdersServiceImpl implements OrdersService {
     private CustomerRepository customerRepository;
 
     @Autowired
-    private ItemRepository itemRepository;
+    private ProductRepository productRepository;
 
     @Autowired
-    private OrderItemRepository orderItemRepository;
+    private OrderProductRepository orderProductRepository;
 
     @Override
     public List<Order> getOrders() {
@@ -49,60 +48,93 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public Order createOrder(OrderRequest request) {
-        if (request != null && request.getCreatedAt() != null
+    public Order createOrder(CreateOrderRequest request) {
+        if (request != null
                 && StringUtils.hasLength(request.getCurrency().trim())
                 && StringUtils.hasLength(request.getNumber().trim())
                 && StringUtils.hasLength(request.getPaymentMethod().trim())
-                && request.getTotalAmount() > 0
-                && request.getItemDetails().size() > 0) {
-            Customer customer = customerRepository.getReferenceById(request.getIdCustomer());
+                && request.getProductsExtraInfo().size() > 0) {
+            Customer customer = customerRepository.findById(request.getIdCustomer()).orElse(null);
+
+            List<OrderProduct> orderProducts = new ArrayList<>();
+
+            /**
+             * Buscar productos existentes o registrar productos consultando al microservicio
+             */
+            List<Product> products = new ArrayList<>();
+            for (ProductExtraInfo productExtraInfo : request.getProductsExtraInfo()) {
+                long idItem = productExtraInfo.getIdProduct();
+                Product product = productRepository.findById(idItem).orElse(null);
+
+                if (product == null) {
+                    // Obtener el producto del microservicio y registrarlo
+                    ProductResponse productFromMaster = productsFacade.getProduct(idItem);
+
+                    Product productToSave = Product.builder()
+                            .id(productFromMaster.getId())
+                            .name(productFromMaster.getName())
+                            .category(productFromMaster.getCategory())
+                            .currency(productFromMaster.getCurrency())
+                            .image(productFromMaster.getImage())
+                            .price(productFromMaster.getPrice())
+                            .build();
+
+                    product = productRepository.saveAndFlush(productToSave);
+                }
+                products.add(product);
+            }
+
+            /**
+             * Calcular el monto total y registrar el pedido
+             */
+            Double totalAmount = products.stream().map(p -> p.getPrice()).reduce(0.0, Double::sum);
 
             Order order = Order.builder().createdAt(new Date())
                     .currency(request.getCurrency())
                     .number(request.getNumber())
                     .paymentMethod(request.getPaymentMethod())
                     .status("pending")
-                    .totalAmount(request.getTotalAmount())
+                    .totalAmount(totalAmount)
                     .customer(customer)
                     .build();
 
-            Order orderCreated = repository.save(order);
+            Order orderCreated = repository.saveAndFlush(order);
 
-            /*
-             Buscar y registrar items en caso que no existieran a partir de los productos del respectivo microservicio
+            /**
+             * Regitrar los detalles de la orden y actualizar los stocks
              */
-            List<Item> items = new ArrayList<>();
-            for (ItemDetails itemDetails : request.getItemDetails()) {
-                long idItem = itemDetails.getIdProduct();
-                Item item = itemRepository.findById(idItem).orElse(null);
-
-                if (item == null) {
-                    Item itemFromProduct = productsFacade.getItemsFromProducts(String.valueOf(idItem));
-                    item = itemRepository.save(itemFromProduct);
-                }
-                items.add(item);
-            }
-
-            /*
-            Regitrar los detalles
-             */
-            for (Item item : items) {
-                ItemDetails itemDetails = request.getItemDetails().stream()
-                        .filter(i -> i.getIdProduct() == item.getId())
+            List<ProductResponse> productsStockUpdated = new ArrayList<>();
+            for (Product product : products) {
+                ProductExtraInfo productExtraInfo = request.getProductsExtraInfo().stream()
+                        .filter(p -> p.getIdProduct() == product.getId())
                         .findFirst().orElse(null);
 
-                OrderItem orderItem = OrderItem.builder()
-                        .item(item)
+                OrderProductId orderProductId = new OrderProductId();
+                orderProductId.setIdOrder(orderCreated.getId());
+                orderProductId.setIdProduct(product.getId());
+
+                OrderProduct orderProduct = OrderProduct.builder()
+                        .orderProductId(orderProductId)
                         .order(orderCreated)
-                        .billingCycle(itemDetails.getBillingCycle())
-                        .unitAmount(itemDetails.getUnitAmount())
+                        .product(product)
+                        .quantity(productExtraInfo.getQuantity())
                         .build();
 
-                orderCreated.getOrderItems().add(orderItemRepository.save(orderItem));
+                orderProducts.add(orderProductRepository.saveAndFlush(orderProduct));
+
+                // Actualizar stocks
+                UpdateInventoryRequest updateInventoryRequest = new UpdateInventoryRequest();
+                updateInventoryRequest.setQuantity(productExtraInfo.getQuantity());
+                ProductResponse updatedProductStock = productsFacade.updateProductStock(product.getId(), updateInventoryRequest);
+
+                productsStockUpdated.add(updatedProductStock);
             }
 
-            return orderCreated;
+            if (orderCreated.getId() != 0 && orderProducts.size() > 0 && productsStockUpdated.size() > 0) {
+                return orderCreated;
+            } else {
+                return null;
+            }
         } else {
             return null;
         }

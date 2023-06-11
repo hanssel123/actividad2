@@ -1,9 +1,13 @@
 package com.unir.products.controller;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.unir.products.model.request.UpdateProductRequest;
+import com.unir.products.model.request.UpdateProductStockRequest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("api/products")
+@RequestMapping("product")
 // Crea un constructor con un argumento con rest controller es como poner autowired
 @RequiredArgsConstructor
 // Para poner logs
@@ -47,7 +51,7 @@ public class ProductsController {
 
     @GetMapping("/{productId}")
     // se podría cambiar a ResponseEntity<Object>
-    public ResponseEntity<Product> getProduct(@PathVariable String productId) {
+    public ResponseEntity<Product> getProduct(@PathVariable long productId) {
 
         log.info("Request received for product {}", productId);
         Product product = service.getProduct(productId);
@@ -61,7 +65,7 @@ public class ProductsController {
     }
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable String productId) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable long productId) {
 
         Boolean removed = service.removeProduct(productId);
 
@@ -86,4 +90,119 @@ public class ProductsController {
 
     }
 
+    @PutMapping("/{productId}")
+    public ResponseEntity<Product> updateProduct(@PathVariable long productId, @RequestBody UpdateProductRequest request) {
+
+        Product updatedProduct = service.updateProduct(productId, request);
+
+        if (updatedProduct != null) {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(updatedProduct);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PatchMapping("/{productId}/stock")
+    public ResponseEntity<Product> updateProductStock(@PathVariable long productId, @RequestBody UpdateProductStockRequest request) {
+
+        Product updatedProduct = service.updateProductStock(productId, request);
+
+        if (updatedProduct != null) {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(updatedProduct);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    /**
+     * Peticiones Get para consultas adicionales
+     */
+
+    // Nombre
+    @GetMapping("/name/{name}")
+    public ResponseEntity<List<Product>> getProductsByName(@RequestHeader Map<String, String> headers, @PathVariable String name) {
+
+        log.info("headers {}", headers);
+        List<Product> products = service.getByNameStartsWith(name);
+
+        if (products != null) {
+            return ResponseEntity.ok(products);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+
+    @GetMapping("/available/{isAvailable}")
+    public ResponseEntity<List<Product>> getProductsByStockAvailable(@RequestHeader Map<String, String> headers, @PathVariable boolean isAvailable) {
+
+        log.info("headers {}", headers);
+        List<Product> products = service.getByStockAvailable(isAvailable);
+
+        if (products != null) {
+            return ResponseEntity.ok(products);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+
+    @GetMapping("/created-at-between/{dateStart}/{dateEnd}")
+    public ResponseEntity<List<Product>> getProductsFilterBetweenCreatedDates(
+            @RequestHeader Map<String, String> headers,
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dateStart,
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dateEnd) {
+
+        log.info("headers {}", headers);
+        List<Product> products = service.filterBetweenCreatedDates(dateStart, dateEnd);
+
+        if (products != null) {
+            return ResponseEntity.ok(products);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<Product>> getProductsByCategory(@RequestHeader Map<String, String> headers, @PathVariable String category) {
+
+        log.info("headers {}", headers);
+        List<Product> products = service.getByCategory(category);
+
+        if (products != null) {
+            return ResponseEntity.ok(products);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+
+    @GetMapping("/price/{price}/greater")
+    public ResponseEntity<List<Product>> getProductsByPriceGreaterThan(@RequestHeader Map<String, String> headers, @PathVariable Double price) {
+
+        log.info("headers {}", headers);
+        List<Product> products = service.getByPriceGreaterThan(price);
+
+        if (products != null) {
+            return ResponseEntity.ok(products);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+
+    @GetMapping("/price/{price}/less")
+    public ResponseEntity<List<Product>> getProductsByPriceLessThan(@RequestHeader Map<String, String> headers, @PathVariable Double price) {
+
+        log.info("headers {}", headers);
+        List<Product> products = service.getByPriceLessThan(price);
+
+        if (products != null) {
+            return ResponseEntity.ok(products);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
+    }
 }

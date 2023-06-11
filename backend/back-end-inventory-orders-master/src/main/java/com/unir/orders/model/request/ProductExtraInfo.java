@@ -9,8 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemDetails {
+public class ProductExtraInfo {
     private long idProduct;
-    private Double unitAmount;
-    private String billingCycle;
+    private int quantity;
 }

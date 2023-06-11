@@ -1,5 +1,7 @@
 package com.unir.orders.model.pojo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,7 +18,7 @@ import java.util.*;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Column(name = "createdAt")
     private Date createdAt;
@@ -26,6 +28,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "idCustomer")
+    @JsonBackReference
     private Customer customer;
 
     @Column(name = "number")
@@ -41,5 +44,6 @@ public class Order {
     private Double totalAmount;
 
     @OneToMany(mappedBy = "order")
-    private List<OrderItem> orderItems;
+    @JsonManagedReference
+    private List<OrderProduct> orderProducts;
 }

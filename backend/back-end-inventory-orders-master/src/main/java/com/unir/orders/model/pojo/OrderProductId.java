@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderItemId {
+public class OrderProductId {
     @Column(name = "idOrder")
-    private Long idOrder;
+    private long idOrder;
 
-    @Column(name = "idItem")
-    private Long idItem;
+    @Column(name = "idProduct")
+    private long idProduct;
 }

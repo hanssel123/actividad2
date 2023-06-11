@@ -1,18 +1,17 @@
 package com.unir.products.model.request;
 
-import java.util.Date;
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateProductRequest {
+public class UpdateProductRequest {
 
 //	private String name;
 //	private String country;
@@ -20,7 +19,7 @@ public class CreateProductRequest {
 //	private Boolean visible;
 	
    // private List<String> attributes;
-	private String name;
+    private String name;
     private String category;
     private Date createdAt;
     private String currency;
@@ -28,6 +27,8 @@ public class CreateProductRequest {
     private Boolean inStock;
     private Boolean isAvailable;
     private Boolean isShippable;
+    private Double price;
+    private int quantity;
     private String sku;
     private String status;
     private Date updatedAt;
