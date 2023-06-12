@@ -46,34 +46,9 @@ public class ProductsFacade {
             HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
             RestTemplate restTemplateForFactory = new RestTemplate(requestFactory);
 
-            String responseEntity = restTemplateForFactory.patchForObject(productUrl, request, String.class);
+            ProductResponse responseEntity = restTemplateForFactory.patchForObject(productUrl, request, ProductResponse.class);
 
-            return null;
-            /*
-            ObjectMapper objectMapper = new ObjectMapper();
-            String requestBody = objectMapper.writeValueAsString(request);
-
-
-
-            //ProductResponse productStockUpdated = restTemplate.patchForObject(productUrl, request, ProductResponse.class);
-
-            HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(URI.create(productUrl))
-                    .header("Content-Type", "application/json")
-                    .method("PATCH", HttpRequest.BodyPublishers.ofString(requestBody))
-                    .build();
-
-            HttpResponse<String> response = HttpClient.newHttpClient().send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-            int statusCode = response.statusCode();
-
-            if (statusCode == 202) {
-                String responseBody = response.body();
-                ProductResponse productStockUpdated = objectMapper.readValue(responseBody, ProductResponse.class);
-                return productStockUpdated;
-            } else {
-                return null;
-            }*/
+            return responseEntity;
         } catch (HttpClientErrorException e) {
             log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), id);
             return null;
