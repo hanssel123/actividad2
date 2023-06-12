@@ -3,6 +3,7 @@ package com.unir.orders.controller;
 import com.unir.orders.model.pojo.Order;
 import com.unir.orders.service.OrdersServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.unir.orders.model.request.CreateOrderRequest;
@@ -30,7 +31,7 @@ public class OrdersController {
         if (orders != null) {
             return ResponseEntity.ok(orders);
         } else {
-            return ResponseEntity.ok(Collections.emptyList());
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -40,7 +41,7 @@ public class OrdersController {
         Order createdOrder = service.createOrder(request);
 
         if (createdOrder != null) {
-            return ResponseEntity.ok(createdOrder);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
         } else {
             return ResponseEntity.badRequest().build();
         }

@@ -26,7 +26,7 @@ public class CustomersController {
         if (customers != null) {
             return ResponseEntity.ok(customers);
         } else {
-            return ResponseEntity.ok(Collections.emptyList());
+            return ResponseEntity.notFound().build();
         }
     }
 

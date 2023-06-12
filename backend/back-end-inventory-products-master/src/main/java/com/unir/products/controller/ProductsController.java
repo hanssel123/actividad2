@@ -45,7 +45,7 @@ public class ProductsController {
         if (products != null) {
             return ResponseEntity.ok(products);
         } else {
-            return ResponseEntity.ok(Collections.emptyList());
+            return ResponseEntity.notFound().build();
         }
     }
 
