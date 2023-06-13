@@ -1,31 +1,31 @@
 package com.unir.orders.controller;
 
 import com.unir.orders.model.pojo.Product;
+import com.unir.orders.model.response.ProductResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.unir.orders.model.request.UpdateInventoryRequest;
 import com.unir.orders.service.InventoryService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequestMapping("inventory")
 @RequiredArgsConstructor
 public class InventoryController {
 
-	private final InventoryService service;
+    private final InventoryService service;
 
-	@PatchMapping("/inventory")
-	public ResponseEntity<Product> UpdateInventory(@RequestBody UpdateInventoryRequest request) {
+    @PatchMapping("/{productId}")
+    public ResponseEntity<ProductResponse> UpdateInventory(@PathVariable long productId, @RequestBody UpdateInventoryRequest request) {
 
-	  Product result = service.updateQuantityInventory(request);
-	  
-	  if(result != null) {
-	    return ResponseEntity.ok(result);
-	  } else {
-	    return ResponseEntity.badRequest().build();
-	  }
-		
-	}
+        ProductResponse result = service.updateQuantityInventory(productId, request);
+
+        if (result != null) {
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+
+    }
 }

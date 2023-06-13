@@ -1,5 +1,6 @@
 package com.unir.orders.service;
 
+import com.unir.orders.model.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,17 +11,18 @@ import com.unir.orders.model.request.UpdateInventoryRequest;
 @Service
 public class InventoryServiceImpl implements InventoryService {
 
-  @Autowired
-  private ProductsFacade productsFacade;
+    @Autowired
+    private ProductsFacade productsFacade;
 
-  @Override
-  public Product updateQuantityInventory(UpdateInventoryRequest request) {
-    Product product = productsFacade.getProduct(request.getProductId());
-    if (product == null) return null;
-    product.setQuantity(request.getQuantity());
-    product = productsFacade.updateProduct(product);
-
-    return product;
-  }
+    @Override
+    public ProductResponse updateQuantityInventory(long id, UpdateInventoryRequest request) {
+        ProductResponse product = productsFacade.getProduct(id);
+        if (product != null) {
+            ProductResponse productUpdated = productsFacade.updateProductStock(id, request);
+            return productUpdated;
+        } else {
+            return null;
+        }
+    }
 
 }

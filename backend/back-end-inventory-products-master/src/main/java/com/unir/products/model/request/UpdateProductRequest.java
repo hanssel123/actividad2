@@ -19,7 +19,6 @@ public class UpdateProductRequest {
 //	private Boolean visible;
 	
    // private List<String> attributes;
-    private long id;
     private String name;
     private String category;
     private Date createdAt;

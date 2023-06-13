@@ -28,7 +28,7 @@ import lombok.ToString;
 public class Product {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 //	@Column(name = "name", unique = true)
@@ -51,7 +51,7 @@ public class Product {
 	@Column(name = "category")
     private String category;
 	
-	@Column(name = "createdA")
+	@Column(name = "createdAt")
     private Date createdAt;
 	
 	@Column(name = "currency")

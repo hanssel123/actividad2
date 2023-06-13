@@ -16,9 +16,10 @@ spring:
   application:
     name: ms-inventory-orders
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:ordersbackenddb
   jpa:
     show-sql: true
+    defer-datasource-initialization: true
   h2:
     console:
       enabled: true
@@ -28,4 +29,4 @@ spring:
 
 ## Configuracion secundaria (custom)
 getProduct:
-  url: http://ms-inventory-products/product/%s
+  url: http://ms-inventory-products/product/%d
