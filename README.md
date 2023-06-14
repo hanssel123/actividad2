@@ -15,7 +15,9 @@ Sonalint (MK Eclipse): https://marketplace.eclipse.org/content/sonarlint
 
 Desde la carpeta del repositorio correr
 **mvn clean package**
+
 Click derecho en el proyecto y seleccionar Maven -> Update Project
-Y desde Spring Tool 4 click derecho y seleccionar start
+
+Abrir boot dashboard y desde Spring Tool 4 click derecho y seleccionar start
 
 
