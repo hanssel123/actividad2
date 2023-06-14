@@ -5,7 +5,7 @@ JDK de Java 17 (Configurar variable de entorno): https://www.eclipse.org/downloa
 
 Maven (Configurar variable de entorno):https://maven.apache.org/install.html
 
-ProjectLombok: https://projectlombok.org/download
+ProjectLombok: https://projectlombok.org/download or https://onlydeveloper.com/instalar-lombok-en-eclipse/
 
 Eclipse: https://www.eclipse.org/downloads/
 
