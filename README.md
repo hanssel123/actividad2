@@ -20,4 +20,6 @@ Click derecho en cada proyecto y seleccionar Maven -> Update Project
 
 Abrir boot dashboard y desde Spring Tool 4 click derecho y seleccionar start en cada microservicio
 
-
+**PARA ACCEDER A SWAGGER USAR LAS URL:**
+http://localhost:8082/swagger-ui/index.html
+http://localhost:8088/swagger-ui/index.html
