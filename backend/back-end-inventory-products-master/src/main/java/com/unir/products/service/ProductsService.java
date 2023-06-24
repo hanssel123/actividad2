@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.unir.products.model.pojo.Product;
 import com.unir.products.model.request.CreateProductRequest;
+import com.unir.products.model.request.UpdateProductLogisticRequest;
 import com.unir.products.model.request.UpdateProductRequest;
 import com.unir.products.model.request.UpdateProductStockRequest;
 
@@ -21,6 +22,8 @@ public interface ProductsService {
     Product updateProduct(long productId, UpdateProductRequest request);
 
     Product updateProductStock(long productId, UpdateProductStockRequest request);
+
+    Product updateProductLogistic(long productId, UpdateProductLogisticRequest request);
 
     /**
      * Consultas adicionales

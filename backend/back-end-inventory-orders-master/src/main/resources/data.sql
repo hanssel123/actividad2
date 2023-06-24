@@ -9,17 +9,17 @@ VALUES ('Street Lincoln, no. 4', 'Casa #30', 'California', 'USA', 'juan.perez@de
 
 -- Pedidos
 
-INSERT INTO orders (created_At, currency, number, payment_Method, status, total_Amount, id_Customer)
-VALUES (CURRENT_TIMESTAMP, '$', 'DEV-102', 'CreditCard', 'pending', 500.00, 1);
+INSERT INTO orders (created_At, currency, number, payment_Method, status, total_Amount, review, id_Customer)
+VALUES (CURRENT_TIMESTAMP, '$', 'DEV-102', 'CreditCard', 'pending', 500.00, 'good', 1);
 
-INSERT INTO orders (created_At, currency, number, payment_Method, status, total_Amount, id_Customer)
-VALUES (CURRENT_TIMESTAMP, '$', 'DEV-101', 'PayPal', 'complete', 324.50, 1);
+INSERT INTO orders (created_At, currency, number, payment_Method, status, total_Amount, review, id_Customer)
+VALUES (CURRENT_TIMESTAMP, '$', 'DEV-101', 'PayPal', 'complete', 324.50, 'regular', 1);
 
-INSERT INTO orders (created_At, currency, number, payment_Method, status, total_Amount, id_Customer)
-VALUES (CURRENT_TIMESTAMP, '$', 'DEV-100', 'CreditCard', 'canceled', 746.50, 2);
+INSERT INTO orders (created_At, currency, number, payment_Method, status, total_Amount, review, id_Customer)
+VALUES (CURRENT_TIMESTAMP, '$', 'DEV-100', 'CreditCard', 'canceled', 746.50, 'bad', 2);
 
-INSERT INTO orders (created_At, currency, number, payment_Method, status, total_Amount, id_Customer)
-VALUES (CURRENT_TIMESTAMP, '$', 'DEV-99', 'PayPal', 'rejected', 56.89, 2);
+INSERT INTO orders (created_At, currency, number, payment_Method, status, total_Amount, review, id_Customer)
+VALUES (CURRENT_TIMESTAMP, '$', 'DEV-99', 'PayPal', 'rejected', 56.89, 'good', 2);
 
 -- productos registrados en pedidos
 

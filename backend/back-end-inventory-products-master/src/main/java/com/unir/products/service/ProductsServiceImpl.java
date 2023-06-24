@@ -3,6 +3,7 @@ package com.unir.products.service;
 import java.util.Date;
 import java.util.List;
 
+import com.unir.products.model.request.UpdateProductLogisticRequest;
 import com.unir.products.model.request.UpdateProductRequest;
 import com.unir.products.model.request.UpdateProductStockRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,6 +152,50 @@ public class ProductsServiceImpl implements ProductsService {
                 product.setUpdatedAt(new Date());
 
                 return repository.save(product);
+            } else {
+                return null;
+            }
+
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Product updateProductLogistic(long productId, UpdateProductLogisticRequest request) {
+        if (request != null) {
+            Product product = repository.findById(productId).orElse(null);
+
+            if (product != null) {
+                boolean isUpdatable = false;
+
+                if (product.getQuantity() != request.getQuantity()
+                        || !product.getCategory().equals(request.getCategory())
+                        || !product.getName().equals(request.getName())
+                        || product.getPrice() != request.getPrice()) {
+                    isUpdatable = true;
+                }
+
+                if (product.getQuantity() != request.getQuantity()) {
+                    product.setQuantity(request.getQuantity());
+                }
+                if (!product.getCategory().equals(request.getCategory())) {
+                    product.setCategory(request.getCategory());
+                }
+                if (!product.getName().equals(request.getName())) {
+                    product.setName(request.getName());
+                }
+                if (product.getPrice() != request.getPrice()) {
+                    product.setPrice(request.getPrice());
+                }
+
+                product.setUpdatedAt(new Date());
+
+                if (isUpdatable) {
+                    return repository.save(product);
+                } else {
+                    return null;
+                }
             } else {
                 return null;
             }

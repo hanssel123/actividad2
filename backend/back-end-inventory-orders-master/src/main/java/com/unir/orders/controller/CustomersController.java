@@ -41,4 +41,16 @@ public class CustomersController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @DeleteMapping("/{customerId}")
+    public ResponseEntity<Customer> deleteCustomer(@PathVariable long customerId, @RequestHeader Map<String, String> headers) {
+        log.info("headers: {}", headers);
+        Boolean removed = service.removeCustomer(customerId);
+
+        if (Boolean.TRUE.equals(removed)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

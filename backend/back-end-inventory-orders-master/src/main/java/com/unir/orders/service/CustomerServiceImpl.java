@@ -23,5 +23,17 @@ public class CustomerServiceImpl implements CustomerService {
         return repository.findById(id).orElse(null);
     }
 
+    @Override
+    public Boolean removeCustomer(long id) {
+        Customer customer = repository.findById(id).orElse(null);
+
+        if (customer != null) {
+            repository.deleteById(id);
+            return Boolean.TRUE;
+        } else {
+            return Boolean.FALSE;
+        }
+    }
+
 
 }

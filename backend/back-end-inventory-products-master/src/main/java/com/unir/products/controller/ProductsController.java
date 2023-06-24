@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.unir.products.model.request.UpdateProductLogisticRequest;
 import com.unir.products.model.request.UpdateProductRequest;
 import com.unir.products.model.request.UpdateProductStockRequest;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -106,6 +107,17 @@ public class ProductsController {
     public ResponseEntity<Product> updateProductStock(@PathVariable long productId, @RequestBody UpdateProductStockRequest request) {
 
         Product updatedProduct = service.updateProductStock(productId, request);
+
+        if (updatedProduct != null) {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(updatedProduct);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PatchMapping("/{productId}/logistic")
+    public ResponseEntity<Product> updateProductLogistic(@PathVariable long productId, @RequestBody UpdateProductLogisticRequest request) {
+        Product updatedProduct = service.updateProductLogistic(productId, request);
 
         if (updatedProduct != null) {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(updatedProduct);

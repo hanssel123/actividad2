@@ -38,7 +38,12 @@ public class Customer {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer")
     @JsonManagedReference
     private List<Order> orders;
+
+    @PreRemove
+    public void setOrdersNullable() {
+        orders.forEach(order -> order.setCustomer(null));
+    }
 }

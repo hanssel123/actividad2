@@ -7,6 +7,7 @@ import com.unir.orders.data.ProductRepository;
 import com.unir.orders.model.pojo.*;
 import com.unir.orders.model.request.ProductExtraInfo;
 import com.unir.orders.model.request.UpdateInventoryRequest;
+import com.unir.orders.model.request.UpdateStatusRequest;
 import com.unir.orders.model.response.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -138,6 +139,23 @@ public class OrdersServiceImpl implements OrdersService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public Order updateOrderStatus(long idOrder, UpdateStatusRequest request) {
+        if (request != null && request.getStatus() != null) {
+            Order order = repository.findById(idOrder).orElse(null);
+
+            if (order != null) {
+                String status = request.getStatus();
+                order.setStatus(status);
+
+                return repository.save(order);
+            } else {
+                return null;
+            }
+        }
+        return null;
     }
 
 }

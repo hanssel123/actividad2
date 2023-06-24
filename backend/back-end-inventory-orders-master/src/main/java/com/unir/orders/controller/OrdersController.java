@@ -1,6 +1,7 @@
 package com.unir.orders.controller;
 
 import com.unir.orders.model.pojo.Order;
+import com.unir.orders.model.request.UpdateStatusRequest;
 import com.unir.orders.service.OrdersServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -46,6 +47,17 @@ public class OrdersController {
             return ResponseEntity.badRequest().build();
         }
 
+    }
+
+    @PatchMapping("/{idOrder}/status")
+    public ResponseEntity<Order> updateStatus(@PathVariable long idOrder, @RequestBody UpdateStatusRequest request) {
+        Order updatedOrder = service.updateOrderStatus(idOrder, request);
+
+        if (updatedOrder != null) {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(updatedOrder);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }
