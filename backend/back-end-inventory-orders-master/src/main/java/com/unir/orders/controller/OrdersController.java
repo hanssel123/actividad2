@@ -32,7 +32,18 @@ public class OrdersController {
         if (orders != null) {
             return ResponseEntity.ok(orders);
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{idOrder}")
+    public ResponseEntity<Order> getOrder(@PathVariable long idOrder) {
+        Order order = service.getOrder(idOrder);
+
+        if (order != null) {
+            return ResponseEntity.ok(order);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 

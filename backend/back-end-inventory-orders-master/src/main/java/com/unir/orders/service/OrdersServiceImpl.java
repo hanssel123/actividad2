@@ -49,6 +49,11 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
+    public Order getOrder(long id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    @Override
     public Order createOrder(CreateOrderRequest request) {
         if (request != null
                 && StringUtils.hasLength(request.getCurrency().trim())
@@ -102,9 +107,9 @@ public class OrdersServiceImpl implements OrdersService {
             Order orderCreated = repository.saveAndFlush(order);
 
             /**
-             * Regitrar los detalles de la orden y actualizar los stocks
+             * Regitrar los detalles de la orden
              */
-            List<ProductResponse> productsStockUpdated = new ArrayList<>();
+            // List<ProductResponse> productsStockUpdated = new ArrayList<>();
             for (Product product : products) {
                 ProductExtraInfo productExtraInfo = request.getProductsExtraInfo().stream()
                         .filter(p -> p.getIdProduct() == product.getId())
@@ -123,15 +128,19 @@ public class OrdersServiceImpl implements OrdersService {
 
                 orderProducts.add(orderProductRepository.saveAndFlush(orderProduct));
 
-                // Actualizar stocks
+                // Actualizar stocks (en revisión - usar al microservicio de products para actualizar)
+                /*
                 UpdateInventoryRequest updateInventoryRequest = new UpdateInventoryRequest();
                 updateInventoryRequest.setQuantity(productExtraInfo.getQuantity());
                 ProductResponse updatedProductStock = productsFacade.updateProductStock(product.getId(), updateInventoryRequest);
 
                 productsStockUpdated.add(updatedProductStock);
+
+                 */
             }
 
-            if (orderCreated.getId() != 0 && orderProducts.size() > 0 && productsStockUpdated.size() > 0) {
+            if (orderCreated.getId() != 0 && orderProducts.size() > 0) {
+                orderCreated.setOrderProducts(orderProducts);
                 return orderCreated;
             } else {
                 return null;

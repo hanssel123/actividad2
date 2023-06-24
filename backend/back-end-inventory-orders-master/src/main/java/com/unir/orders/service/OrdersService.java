@@ -9,6 +9,8 @@ import java.util.List;
 public interface OrdersService {
     List<Order> getOrders();
 
+    Order getOrder(long id);
+
     Order createOrder(CreateOrderRequest request);
 
     Order updateOrderStatus(long idOrder, UpdateStatusRequest request);
