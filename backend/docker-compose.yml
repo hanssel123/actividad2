@@ -1,0 +1,53 @@
+version: '1.0'
+services:
+  eureka-server:
+    image: eureka
+    restart: always
+    container_name: eurekaUnirContainer
+    build: ./back-end-eureka-master/.
+    ports:
+      - '8761:8761'
+    networks:
+      - 'dockernetflix-network'
+  gateway:
+    image: gateway
+    restart: always
+    container_name: gatewayUnirContainer
+    build: ./back-end-cloud-gateway-master/.
+    ports:
+      - '8762:8762'
+    networks:
+      - 'dockernetflix-network'
+  ms-inventory-orders:
+    image: ms-inventory-orders
+    restart: always
+    container_name: ordersUnirContainer
+    build: ./back-end-inventory-orders-master/.
+    ports:
+      - '8082:8082'
+    networks:
+      - 'dockernetflix-network'
+  ms-inventory-products:
+    image: ms-inventory-products
+    restart: always
+    container_name: productsUnirContainer
+    build: ./back-end-inventory-products-master/.
+    ports:
+      - '8088:8088'
+    networks:
+      - 'dockernetflix-network'
+
+  elastic-search-products:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
+    restart: always
+    container_name: elasticsearchProductsUnirContainer
+    ports:
+      - '9200:9200'
+    environment:
+      - discovery.type=single-node
+    networks:
+      - 'dockernetflix-network'
+
+networks:
+  dockernetflix-network:
+

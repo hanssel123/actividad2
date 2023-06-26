@@ -5,13 +5,13 @@ server:
 eureka:
   instance:
     preferIpAddress: false
-    hostname: ${HOSTNAME:localhost}
+    hostname: ${HOSTNAME:eureka-server}
     
   client:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+      defaultZone: ${EUREKA_URL:http://eureka-server:8761/eureka}
       
 
 ## Habilitamos el service discovery (haciendo uso de Eureka)
