@@ -10,4 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReviewOrder {
+    private String review;
+    private long quantity;
 }
