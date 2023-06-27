@@ -167,9 +167,4 @@ public class OrdersServiceImpl implements OrdersService {
         }
         return null;
     }
-
-    @Override
-    public List<ReviewOrder> getReviewOrders() {
-        return repository.getReviewOrders();
-    }
 }

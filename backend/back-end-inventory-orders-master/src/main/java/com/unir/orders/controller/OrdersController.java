@@ -71,18 +71,4 @@ public class OrdersController {
             return ResponseEntity.badRequest().build();
         }
     }
-
-    /*
-        Review de clientes
-     */
-    @GetMapping("/review")
-    public ResponseEntity<List<ReviewOrder>> getReviewOrders() {
-        List<ReviewOrder> reviewOrders = service.getReviewOrders();
-
-        if (reviewOrders != null) {
-            return ResponseEntity.ok(reviewOrders);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
 }
