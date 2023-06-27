@@ -4,12 +4,14 @@ import com.unir.products.data.ElasticsearchQuery;
 import com.unir.products.model.pojo.ElasticProduct;
 import com.unir.products.model.request.CreateProductRequest;
 import com.unir.products.model.request.UpdateProductRequest;
+import com.unir.products.model.response.ElasticProductResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,8 +59,27 @@ public class ElasticProductsServiceImpl implements ElasticProductsService {
     }
 
     @Override
-    public ElasticProduct getProductById(String productId) throws IOException {
-        return query.getProductById(productId);
+    public ElasticProductResponse getProductById(String productId) throws IOException {
+        ElasticProduct product = query.getProductById(productId);
+        ElasticProductResponse response = ElasticProductResponse.builder()
+                .id(Long.parseLong(product.getId()))
+                .name(product.getName())
+                .category(product.getCategory())
+                .createdAt(product.getCreatedAt())
+                .currency(product.getCurrency())
+                .image(product.getImage())
+                .inStock(product.getInStock())
+                .isAvailable(product.getIsAvailable())
+                .isShippable(product.getIsShippable())
+                .price(product.getPrice())
+                .quantity(product.getQuantity())
+                .sku(product.getSku())
+                .status(product.getStatus())
+                .updatedAt(product.getUpdatedAt())
+                .variants(product.getVariants())
+                .build();
+
+        return response;
     }
 
     @Override
@@ -101,13 +122,53 @@ public class ElasticProductsServiceImpl implements ElasticProductsService {
     }
 
     @Override
-    public List<ElasticProduct> searchAllProducts() throws IOException {
-        return query.searchAllProducts();
+    public List<ElasticProductResponse> searchAllProducts() throws IOException {
+        List<ElasticProduct> products = query.searchAllProducts();
+
+        return products.stream()
+                .map(p -> ElasticProductResponse.builder()
+                        .id(Long.parseLong(p.getId()))
+                        .name(p.getName())
+                        .category(p.getCategory())
+                        .createdAt(p.getCreatedAt())
+                        .currency(p.getCurrency())
+                        .image(p.getImage())
+                        .inStock(p.getInStock())
+                        .isAvailable(p.getIsAvailable())
+                        .isShippable(p.getIsShippable())
+                        .price(p.getPrice())
+                        .quantity(p.getQuantity())
+                        .sku(p.getSku())
+                        .status(p.getStatus())
+                        .updatedAt(p.getUpdatedAt())
+                        .variants(p.getVariants())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     @Override
-    public ElasticProduct findByName(String name) throws IOException {
-        return query.findByName(name);
+    public ElasticProductResponse findByName(String name) throws IOException {
+        ElasticProduct product = query.findByName(name);
+
+        ElasticProductResponse response = ElasticProductResponse.builder()
+                .id(Long.parseLong(product.getId()))
+                .name(product.getName())
+                .category(product.getCategory())
+                .createdAt(product.getCreatedAt())
+                .currency(product.getCurrency())
+                .image(product.getImage())
+                .inStock(product.getInStock())
+                .isAvailable(product.getIsAvailable())
+                .isShippable(product.getIsShippable())
+                .price(product.getPrice())
+                .quantity(product.getQuantity())
+                .sku(product.getSku())
+                .status(product.getStatus())
+                .updatedAt(product.getUpdatedAt())
+                .variants(product.getVariants())
+                .build();
+
+        return response;
     }
 
     @Override

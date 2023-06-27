@@ -3,6 +3,7 @@ package com.unir.products.controller;
 import com.unir.products.model.pojo.ElasticProduct;
 import com.unir.products.model.request.CreateProductRequest;
 import com.unir.products.model.request.UpdateProductRequest;
+import com.unir.products.model.response.ElasticProductResponse;
 import com.unir.products.service.ElasticProductsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +27,8 @@ public class ElasticProductsController {
         Operaciones CRUD básicas
      */
     @GetMapping
-    public ResponseEntity<List<ElasticProduct>> searchAllProducts() {
-        List<ElasticProduct> products = null;
+    public ResponseEntity<List<ElasticProductResponse>> searchAllProducts() {
+        List<ElasticProductResponse> products = null;
 
         try {
             products = service.searchAllProducts();
@@ -43,8 +44,8 @@ public class ElasticProductsController {
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<ElasticProduct> getProductById(@PathVariable String productId) {
-        ElasticProduct product = null;
+    public ResponseEntity<ElasticProductResponse> getProductById(@PathVariable String productId) {
+        ElasticProductResponse product = null;
         try {
             product = service.getProductById(productId);
 
@@ -107,9 +108,9 @@ public class ElasticProductsController {
         Consultas avanzadas
      */
     @GetMapping("name/{name}")
-    public ResponseEntity<ElasticProduct> getProductByName(@PathVariable String name) {
+    public ResponseEntity<ElasticProductResponse> getProductByName(@PathVariable String name) {
         try {
-            ElasticProduct product = service.findByName(name);
+            ElasticProductResponse product = service.findByName(name);
 
             if (product != null) {
                 return ResponseEntity.ok(product);

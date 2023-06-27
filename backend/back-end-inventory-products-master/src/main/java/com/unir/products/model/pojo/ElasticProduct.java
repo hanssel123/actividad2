@@ -1,5 +1,6 @@
 package com.unir.products.model.pojo;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.elasticsearch.annotations.*;
@@ -30,6 +31,7 @@ public class ElasticProduct {
     @Field(name = "currency", type = FieldType.Keyword)
     private String currency;
 
+    @Nullable
     @Field(name = "image", type = FieldType.Text)
     private String image;
 

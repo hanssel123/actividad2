@@ -25,18 +25,18 @@ VALUES (CURRENT_TIMESTAMP, '$', 'DEV-99', 'PayPal', 'rejected', 56.89, 'good', 2
 
 INSERT INTO products (id, category, currency, image, name, price)
 VALUES
-(1, 'cuidado-salud', '$', '/mock-images/products/product_1.png', 'Cuidado de la salud Erbology', 23.99),
-(2, 'maquillaje', '$', '/mock-images/products/product_2.png', 'Maquillaje Lancome Rouge', 95.00),
-(3, 'joyeria', '$', NULL, 'Colección de pulseras superpuestas', 155.00);
+(1016782767, 'cuidado-salud', '$', '/mock-images/products/product_1.png', 'Cuidado de la salud Erbology', 23.99),
+(799203646, 'maquillaje', '$', '/mock-images/products/product_2.png', 'Maquillaje Lancome Rouge', 95.00),
+(-1509745553, 'joyeria', '$', NULL, 'Colección de pulseras superpuestas', 155.00);
 
 -- detalles de pedidos y productos
 
 INSERT INTO orders_products(id_Order, id_Product, quantity)
 VALUES
-(1, 1, 2),
-(1, 2, 3),
-(2, 1, 1),
-(2, 3, 2),
-(3, 1, 1),
-(3, 2, 3),
-(4, 3, 2);
+(1, 1016782767, 2),
+(1, 799203646, 3),
+(2, 1016782767, 1),
+(2, -1509745553, 2),
+(3, 1016782767, 1),
+(3, 799203646, 3),
+(4, -1509745553, 2);
