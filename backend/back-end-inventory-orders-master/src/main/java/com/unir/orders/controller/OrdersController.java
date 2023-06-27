@@ -2,6 +2,7 @@ package com.unir.orders.controller;
 
 import com.unir.orders.model.pojo.Order;
 import com.unir.orders.model.request.UpdateStatusRequest;
+import com.unir.orders.model.response.ReviewOrder;
 import com.unir.orders.service.OrdersServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -71,4 +72,17 @@ public class OrdersController {
         }
     }
 
+    /*
+        Review de clientes
+     */
+    @GetMapping("/review")
+    public ResponseEntity<List<ReviewOrder>> getReviewOrders() {
+        List<ReviewOrder> reviewOrders = service.getReviewOrders();
+
+        if (reviewOrders != null) {
+            return ResponseEntity.ok(reviewOrders);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

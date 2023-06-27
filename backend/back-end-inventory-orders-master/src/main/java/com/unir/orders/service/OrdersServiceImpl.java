@@ -9,6 +9,7 @@ import com.unir.orders.model.request.ProductExtraInfo;
 import com.unir.orders.model.request.UpdateInventoryRequest;
 import com.unir.orders.model.request.UpdateStatusRequest;
 import com.unir.orders.model.response.ProductResponse;
+import com.unir.orders.model.response.ReviewOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -167,4 +168,8 @@ public class OrdersServiceImpl implements OrdersService {
         return null;
     }
 
+    @Override
+    public List<ReviewOrder> getReviewOrders() {
+        return repository.getReviewOrders();
+    }
 }
