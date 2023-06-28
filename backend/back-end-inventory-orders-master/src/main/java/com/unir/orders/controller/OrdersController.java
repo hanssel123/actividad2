@@ -2,6 +2,7 @@ package com.unir.orders.controller;
 
 import com.unir.orders.model.pojo.Order;
 import com.unir.orders.model.request.UpdateStatusRequest;
+import com.unir.orders.model.response.OrderResponse;
 import com.unir.orders.model.response.ReviewOrder;
 import com.unir.orders.service.OrdersServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +27,9 @@ public class OrdersController {
     private final OrdersServiceImpl service;
 
     @GetMapping
-    public ResponseEntity<List<Order>> getOrders(@RequestHeader Map<String, String> headers) {
+    public ResponseEntity<List<OrderResponse>> getOrders(@RequestHeader Map<String, String> headers) {
         log.info("headers: {}", headers);
-        List<Order> orders = service.getOrders();
+        List<OrderResponse> orders = service.getOrders();
 
         if (orders != null) {
             return ResponseEntity.ok(orders);
@@ -38,8 +39,8 @@ public class OrdersController {
     }
 
     @GetMapping("/{idOrder}")
-    public ResponseEntity<Order> getOrder(@PathVariable long idOrder) {
-        Order order = service.getOrder(idOrder);
+    public ResponseEntity<OrderResponse> getOrder(@PathVariable long idOrder) {
+        OrderResponse order = service.getOrder(idOrder);
 
         if (order != null) {
             return ResponseEntity.ok(order);
@@ -49,9 +50,9 @@ public class OrdersController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody CreateOrderRequest request) {
+    public ResponseEntity<OrderResponse> createOrder(@RequestBody CreateOrderRequest request) {
 
-        Order createdOrder = service.createOrder(request);
+        OrderResponse createdOrder = service.createOrder(request);
 
         if (createdOrder != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
@@ -62,8 +63,8 @@ public class OrdersController {
     }
 
     @PatchMapping("/{idOrder}/status")
-    public ResponseEntity<Order> updateStatus(@PathVariable long idOrder, @RequestBody UpdateStatusRequest request) {
-        Order updatedOrder = service.updateOrderStatus(idOrder, request);
+    public ResponseEntity<OrderResponse> updateStatus(@PathVariable long idOrder, @RequestBody UpdateStatusRequest request) {
+        OrderResponse updatedOrder = service.updateOrderStatus(idOrder, request);
 
         if (updatedOrder != null) {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(updatedOrder);

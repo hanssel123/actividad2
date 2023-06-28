@@ -24,7 +24,7 @@ services:
     container_name: ordersUnirContainer
     build: ./back-end-inventory-orders-master/.
     ports:
-      - '8082:8082'
+      - '8182:8082'
     networks:
       - 'dockernetflix-network'
   ms-inventory-products:
@@ -33,7 +33,7 @@ services:
     container_name: productsUnirContainer
     build: ./back-end-inventory-products-master/.
     ports:
-      - '8088:8088'
+      - '8188:8088'
     networks:
       - 'dockernetflix-network'
 

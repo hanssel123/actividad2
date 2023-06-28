@@ -8,6 +8,7 @@ import com.unir.orders.model.pojo.*;
 import com.unir.orders.model.request.ProductExtraInfo;
 import com.unir.orders.model.request.UpdateInventoryRequest;
 import com.unir.orders.model.request.UpdateStatusRequest;
+import com.unir.orders.model.response.OrderResponse;
 import com.unir.orders.model.response.ProductResponse;
 import com.unir.orders.model.response.ReviewOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.unir.orders.facade.ProductsFacade;
 import com.unir.orders.model.request.CreateOrderRequest;
@@ -40,22 +42,55 @@ public class OrdersServiceImpl implements OrdersService {
     private OrderProductRepository orderProductRepository;
 
     @Override
-    public List<Order> getOrders() {
+    public List<OrderResponse> getOrders() {
         List<Order> orders = repository.findAll();
         if (orders.size() > 0) {
-            return orders;
+            return orders.stream()
+                    .map((o -> {
+                        Customer customer = o.getCustomer();
+                        customer.setOrders(null);
+
+                        return OrderResponse.builder()
+                                .id(o.getId())
+                                .createdAt(o.getCreatedAt())
+                                .currency(o.getCurrency())
+                                .number(o.getNumber())
+                                .paymentMethod(o.getPaymentMethod())
+                                .review(o.getReview())
+                                .status(o.getStatus())
+                                .totalAmount(o.getTotalAmount())
+                                .orderProducts(o.getOrderProducts())
+                                .customer(customer)
+                                .build();
+                    })).collect(Collectors.toList());
         } else {
             return null;
         }
     }
 
     @Override
-    public Order getOrder(long id) {
-        return repository.findById(id).orElse(null);
+    public OrderResponse getOrder(long id) {
+        Order order = repository.findById(id).orElse(null);
+        OrderResponse orderResponse = null;
+
+        if (order != null) {
+            orderResponse = OrderResponse.builder()
+                    .id(order.getId())
+                    .createdAt(order.getCreatedAt())
+                    .currency(order.getCurrency())
+                    .number(order.getNumber())
+                    .paymentMethod(order.getPaymentMethod())
+                    .review(order.getReview())
+                    .status(order.getStatus())
+                    .totalAmount(order.getTotalAmount())
+                    .orderProducts(order.getOrderProducts())
+                    .build();
+        }
+        return orderResponse;
     }
 
     @Override
-    public Order createOrder(CreateOrderRequest request) {
+    public OrderResponse createOrder(CreateOrderRequest request) {
         if (request != null
                 && StringUtils.hasLength(request.getCurrency().trim())
                 && StringUtils.hasLength(request.getNumber().trim())
@@ -142,7 +177,21 @@ public class OrdersServiceImpl implements OrdersService {
 
             if (orderCreated.getId() != 0 && orderProducts.size() > 0) {
                 orderCreated.setOrderProducts(orderProducts);
-                return orderCreated;
+
+                customer.setOrders(null);
+
+                return OrderResponse.builder()
+                        .id(orderCreated.getId())
+                        .createdAt(orderCreated.getCreatedAt())
+                        .currency(orderCreated.getCurrency())
+                        .number(orderCreated.getNumber())
+                        .paymentMethod(orderCreated.getPaymentMethod())
+                        .review(orderCreated.getReview())
+                        .status(orderCreated.getStatus())
+                        .totalAmount(orderCreated.getTotalAmount())
+                        .customer(customer)
+                        .orderProducts(orderCreated.getOrderProducts())
+                        .build();
             } else {
                 return null;
             }
@@ -152,7 +201,7 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public Order updateOrderStatus(long idOrder, UpdateStatusRequest request) {
+    public OrderResponse updateOrderStatus(long idOrder, UpdateStatusRequest request) {
         if (request != null && request.getStatus() != null) {
             Order order = repository.findById(idOrder).orElse(null);
 
@@ -160,7 +209,19 @@ public class OrdersServiceImpl implements OrdersService {
                 String status = request.getStatus();
                 order.setStatus(status);
 
-                return repository.save(order);
+                Order orderUpdated = repository.save(order);
+
+                return OrderResponse.builder()
+                        .id(orderUpdated.getId())
+                        .createdAt(orderUpdated.getCreatedAt())
+                        .currency(orderUpdated.getCurrency())
+                        .number(orderUpdated.getNumber())
+                        .paymentMethod(orderUpdated.getPaymentMethod())
+                        .review(orderUpdated.getReview())
+                        .status(orderUpdated.getStatus())
+                        .totalAmount(orderUpdated.getTotalAmount())
+                        .orderProducts(orderUpdated.getOrderProducts())
+                        .build();
             } else {
                 return null;
             }
