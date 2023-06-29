@@ -228,4 +228,9 @@ public class OrdersServiceImpl implements OrdersService {
         }
         return null;
     }
+
+    @Override
+    public double totalAmountUntilDate(Date maxDate) {
+        return repository.totalAmountUntilDate(maxDate);
+    }
 }

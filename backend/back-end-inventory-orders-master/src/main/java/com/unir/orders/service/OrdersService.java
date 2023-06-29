@@ -5,6 +5,7 @@ import com.unir.orders.model.request.CreateOrderRequest;
 import com.unir.orders.model.request.UpdateStatusRequest;
 import com.unir.orders.model.response.OrderResponse;
 
+import java.util.Date;
 import java.util.List;
 
 public interface OrdersService {
@@ -15,5 +16,7 @@ public interface OrdersService {
     OrderResponse createOrder(CreateOrderRequest request);
 
     OrderResponse updateOrderStatus(long idOrder, UpdateStatusRequest request);
+
+    double totalAmountUntilDate(Date maxDate);
 
 }
