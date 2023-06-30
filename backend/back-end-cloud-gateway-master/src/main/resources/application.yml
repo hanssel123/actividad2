@@ -30,7 +30,7 @@ spring:
       globalcors: ## Configuracion de CORS a nivel Gateway
         cors-configurations:
           '[/**]': ## Para todas las rutas
-            allowedOrigins: ${ALLOWED_ORIGINS:http://localhost:4000} ## Si ponemos '*' permitimos todos los origenes. Podemos restringir indicando dominios o ip + puerto, p.ej http://localhost:3000 (donde esta nuestro front, o un dominio de Vercel)
+            allowedOrigins: ${ALLOWED_ORIGINS:http://localhost:4000, https://unir-stocktaking.netlify.app} ## Si ponemos '*' permitimos todos los origenes. Podemos restringir indicando dominios o ip + puerto, p.ej http://localhost:3000 (donde esta nuestro front, o un dominio de Vercel)
             allowedHeaders: "*"
             allowedMethods:
             - GET
